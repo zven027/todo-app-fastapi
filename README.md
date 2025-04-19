@@ -6,6 +6,14 @@ FastAPI・SQLModel・Jinja2 を用いたシンプルなToDoアプリケーショ
 A simple ToDo web application built with FastAPI, SQLModel, and Jinja2.  
 Includes features like tagging, completion toggling, and due date assignment.
 
+
+---
+
+## 🔗 公開デモ / Live Demo
+
+📍 https://todo-app-fastapi-production.up.railway.app/  
+> FastAPI + SQLModel 製のToDoアプリを Railway にてデプロイしています。
+
 ---
 
 ## 📌 使用技術 / Tech Stack
