@@ -11,7 +11,8 @@ Includes features like tagging, completion toggling, and due date assignment.
 
 ## 🔗 公開デモ / Live Demo
 
-📍 https://todo-app-fastapi-production.up.railway.app/  
+📍 ## 🔗 公開URL（デプロイ済みアプリ）
+[https://todo-app-fastapi-production.up.railway.app](https://todo-app-fastapi-production.up.railway.app)
 > FastAPI + SQLModel 製のToDoアプリを Railway にてデプロイしています。
 
 ---
