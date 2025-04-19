@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>タスクを編集</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #f8f9fa;
+        padding: 2rem;
+      }
+      input, select {
+        padding: 6px;
+        margin: 6px 0;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+      }
+      button {
+        padding: 6px 12px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #2980b9;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>✏️ タスク編集</h1>
+    <form method="post">
+      <label>タイトル:</label><br />
+      <input type="text" name="title" value="{{ task.title }}" /><br />
+
+      <label>完了状態:</label><br />
+      <select name="is_done">
+        <option value="false" {% if not task.is_done %}selected{% endif %}>未完了</option>
+        <option value="true" {% if task.is_done %}selected{% endif %}>完了</option>
+      </select><br />
+
+      <label>期限 (due_date):</label><br />
+      {% if task.due_date %}
+        <input type="date" name="due_date" value="{{ task.due_date.strftime('%Y-%m-%d') }}" /><br />
+      {% else %}
+        <input type="date" name="due_date" value="" /><br />
+      {% endif %}
+
+      <button type="submit">更新する</button>
+    </form>
+
+    <p><a href="/">← 戻る</a></p>
+  </body>
+</html>

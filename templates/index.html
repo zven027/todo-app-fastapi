@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<!-- prettier-ignore -->
+<html>
+  <head>
+    <title>ToDoリスト</title>
+    <style>
+      body {
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #f8f9fa;
+        padding: 2rem;
+      }
+      
+      h1 {
+        font-size: 2rem;
+        color: #2c3e50;
+      }
+      
+      h2 {
+        font-size: 1.3rem;
+        margin-top: 2rem;
+        color: #2c3e50;
+      }
+      
+      form {
+        margin-bottom: 1rem;
+      }
+      
+      input[type='text'] {
+        padding: 6px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-right: 6px;
+      }
+      
+      button {
+        background-color: #3498db;
+        border: none;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        margin-right: 6px;
+      }
+      
+      button:hover {
+        background-color: #2980b9;
+      }
+      
+      .task-item {
+        background-color: #fff;
+        padding: 1rem;
+        border-radius: 6px;
+        box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+        margin-bottom: 1rem;
+      }
+      
+      .task-title {
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-bottom: 0.4rem;
+      }
+      
+      .task-title.done {
+        color: #999;
+        text-decoration: line-through;
+      }
+      
+      .tag {
+        display: inline-block;
+        background-color: #f1c40f;
+        color: #000;
+        padding: 3px 8px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        margin-right: 5px;
+        margin-top: 4px;
+      }
+      
+      .filter-tags a {
+        margin-right: 10px;
+        font-weight: bold;
+        text-decoration: none;
+        color: #2c3e50;
+      }
+      
+      .filter-tags a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>📝 ToDoリスト</h1>
+
+    <h2>🏷️ タグ一覧</h2>
+
+    <div class="filter-tags">
+      {% for tag in tags %}
+        <a href="/filter_by_tag?tag={{ tag.name }}">
+          {% if selected_tag == tag.name %}
+            <strong>[{{ tag.name }}]</strong>
+          {% else %}
+            [{{ tag.name }}]
+          {% endif %}
+        </a>
+      {% endfor %}
+    </div>
+
+    {% if selected_tag %}
+      <p>
+        🔍 現在のフィルター：<strong>{{ selected_tag }}</strong>
+        <a href="/">← フィルターを解除</a>
+      </p>
+    {% endif %}
+
+    <p>
+      📂 状態で絞り込み：
+      <a href="/" style="margin-right: 10px;">すべて</a>
+      <a href="/?is_done=false" style="margin-right: 10px;">⏳ 未完了</a>
+      <a href="/?is_done=true">✅ 完了</a>
+    </p>
+
+    {% if is_done_filter is not none %}
+      <p>
+        🔍 現在のフィルター：{% if is_done_filter %}
+          ✅ <strong>完了済み</strong>
+        {% else %}
+          ⏳ <strong>未完了</strong>
+        {% endif %}
+        <a href="/">← フィルターを解除</a>
+      </p>
+    {% endif %}
+
+
+<form method="post" action="/add">
+  <input type="text" name="title" placeholder="新しいタスクを入力" />
+  <input type="date" name="due_date" />  <!-- ★ 期限入力欄を追加 -->
+  <button type="submit">追加</button>
+</form>
+
+    {% for task in tasks %}
+      <div class="task-item">
+        <div class="task-title {% if task.is_done %}done{% endif %}">
+          {{ task.title }} {% if task.is_done %}✅{% endif %}
+        </div>
+{% if task.due_date %}
+  {% set today = now().date() %}
+  {% if task.due_date.date() < today %}
+    <div style="color: red;">⏰ 期限：{{ task.due_date.strftime('%Y-%m-%d') }}（期限切れ）</div>
+  {% elif task.due_date.date() == today %}
+    <div style="color: orange;">⏰ 期限：{{ task.due_date.strftime('%Y-%m-%d') }}（今日！）</div>
+  {% else %}
+    <div style="color: #2c3e50;">📅 期限：{{ task.due_date.strftime('%Y-%m-%d') }}</div>
+  {% endif %}
+{% endif %}
+
+
+        {% if task.tags %}
+          <div>
+            {% for tag in task.tags %}
+              <span class="tag">{{ tag.name }}</span>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        <form method="post" action="/toggle_done/{{ task.id }}" style="display:inline;">
+          <button type="submit">
+            {% if task.is_done %}
+              未完了に戻す
+            {% else %}
+              ✅完了にする
+            {% endif %}
+          </button>
+        </form>
+
+        <form method="post" action="/delete/{{ task.id }}" style="display:inline;" onsubmit="return confirm('本当に削除しますか？');">
+          <button type="submit">🗑️ 削除</button>
+        </form>
+<!-- ✏️ 編集ボタンここに追加 -->
+        <form method="get" action="/edit/{{ task.id }}" style="display:inline;">
+          <button type="submit">✏️ 編集</button>
+        </form>
+        <form method="post" action="/add_tag/{{ task.id }}" style="display:inline;">
+          <input type="text" name="tag_name" placeholder="タグを追加" />
+          <button type="submit">タグ追加</button>
+        </form>
+      </div>
+    {% endfor %}
+
+  </body>
+</html>
