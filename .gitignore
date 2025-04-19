@@ -1,0 +1,12 @@
+# Pythonキャッシュファイル
+__pycache__/
+*.py[cod]
+
+# SQLiteデータベース
+*.db
+
+# OS系隠しファイル
+.DS_Store
+
+# VSCode系設定ファイル（任意）
+.vscode/
