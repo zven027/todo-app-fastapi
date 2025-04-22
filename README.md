@@ -13,8 +13,10 @@ Includes features like tagging, completion toggling, and due date assignment.
 
 📍 ## 🔗 公開URL（デプロイ済みアプリ）
 [https://todo-app-fastapi-production.up.railway.app](https://todo-app-fastapi-production.up.railway.app)
-> FastAPI + SQLModel 製のToDoアプリを Railway にてデプロイしています。
-
+> FastAPI + SQLModel 製の ToDo アプリを Railway にてデプロイしています。  
+> 本アプリは GitHub Actions を用いた CI/CD パイプラインを導入しており、  
+> `main` ブランチへの push をきっかけに、Railway に自動で本番環境へデプロイされます。  
+> コードを変更して commit・push するだけで、すぐに最新の状態が反映される仕組みです 。
 ---
 
 ## 📌 使用技術 / Tech Stack
@@ -24,6 +26,8 @@ Includes features like tagging, completion toggling, and due date assignment.
 - SQLModel（SQLAlchemy + Pydantic ベース）
 - Jinja2
 - SQLite（ローカルDB）
+- GitHub Actions（CI/CD 自動デプロイ）
+- Railway（クラウドホスティング）
 
 ---
 
