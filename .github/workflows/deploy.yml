@@ -26,24 +26,9 @@ jobs:
       - name: Install Railway CLI
         run: npm install -g @railway/cli
 
-      - name: Check Railway CLI Version
-        run: railway --version
-
-      - name: Initialize Railway Project
-        run: |
-          railway init
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-
-      - name: Link to Railway Project
-        run: |
-          railway link ${{ secrets.RAILWAY_PROJECT_ID }}
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-
       - name: Deploy to Railway
-        run: |
-          railway up
+        run: railway up
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
+          RAILWAY_STATIC_ENVIRONMENT: true
