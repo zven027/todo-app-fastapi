@@ -5,8 +5,7 @@ from dotenv import load_dotenv
 # .env ファイルを読み込む
 load_dotenv()
 
-# DATABASE_URL を環境変数から取得
-DATABASE_URL = os.getenv("DATABASE_URL")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./todo.db")
 
 # PostgreSQL 用のエンジンを作成
 engine = create_engine(DATABASE_URL, echo=True)
