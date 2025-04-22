@@ -3,20 +3,29 @@ name: Deploy to Railway
 on:
   push:
     branches:
-      - main
+      - main  # mainブランチに push されたら動く
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: ソースコードを取得
         uses: actions/checkout@v3
 
-      - name: Set up Railway
-        run: npm install -g @railway/cli
+      - name: Python をセットアップ
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
 
-      - name: Deploy to Railway
-        run: railway up --service todo-app-fastapi
+      - name: 依存パッケージをインストール
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Railway にデプロイ
+        uses: railwayapp/cli-action@v1
+        with:
+          command: up
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
