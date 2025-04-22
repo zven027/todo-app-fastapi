@@ -322,3 +322,10 @@ def edit_task_submit(
 @app.post("/token")
 def token_endpoint(form_data: OAuth2PasswordRequestForm = Depends()):
     return login_token(form_data)
+
+import os
+import uvicorn
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))  # RailwayはPORT環境変数を使う
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
