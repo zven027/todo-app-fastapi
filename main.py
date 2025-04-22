@@ -327,5 +327,8 @@ import os
 import uvicorn
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8000))  # RailwayはPORT環境変数を使う
+    import uvicorn
+    import os
+
+    port = int(os.environ.get("PORT", 8000))  # ← Railway 自动注入 PORT
     uvicorn.run("main:app", host="0.0.0.0", port=port)
