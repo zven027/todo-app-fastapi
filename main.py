@@ -23,19 +23,87 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles  # CSS使いたいとき用
 from fastapi import Query
 from typing import Optional
-from typing import Optional
 from datetime import datetime
 from sqlmodel import select
+from sqlmodel import SQLModel, Field
+from auth import hash_password
+from fastapi import FastAPI, HTTPException
+from sqlmodel import Session, select
+from database import engine
+from models import User
+from auth import verify_password
+from fastapi import FastAPI, HTTPException
+from sqlmodel import Session, select
+from models import User
+from auth import hash_password
+from database import engine
+from auth import verify_password, create_access_token  # 👈 トークン関数
+from auth import get_current_user
+from fastapi import FastAPI
+from auth import login_token  # auth.pyからインポート
+from fastapi import Depends
+from fastapi.security import OAuth2PasswordRequestForm
 
 app=FastAPI()
 
 templates = Jinja2Templates(directory="templates")
 templates.env.globals["now"] = datetime.now  # 👈 これを追加
 
+
+
 # 程序启动时自动建表（防止漏建）
 @app.on_event("startup")
 def on_startup():
     create_db_and_tables()
+    
+@app.on_event("startup")
+def on_startup():
+    from auth import SECRET_KEY  # ← auth.py から読み込んだ SECRET_KEY
+    print(f"[DEBUG] SECRET_KEY: {SECRET_KEY}")  # 👈 追加！
+    create_db_and_tables()
+    
+@app.post("/login")
+def login(email: str, password: str):
+    with Session(engine) as session:
+        user = session.exec(select(User).where(User.email == email)).first()
+        if not user:
+            raise HTTPException(status_code=400, detail="User not found")
+        
+        if not verify_password(password, user.hashed_password):
+            raise HTTPException(status_code=400, detail="Incorrect password")
+
+        # 👇 トークンを作成
+        access_token = create_access_token(data={"sub": str(user.id)})
+
+        return {
+            "message": "Login successful",
+            "user_id": user.id,
+            "access_token": access_token,
+            "token_type": "bearer"
+        }
+    
+@app.post("/register")
+def register_user(email: str, password: str):
+    with Session(engine) as session:
+        # すでに同じ email があるか確認
+        existing_user = session.exec(
+            select(User).where(User.email == email)
+        ).first()
+        if existing_user:
+            raise HTTPException(status_code=400, detail="Email already registered")
+
+        # 新しいユーザーを作成（パスワードをハッシュ化）
+        user = User(email=email, hashed_password=hash_password(password))
+        session.add(user)
+        session.commit()
+        session.refresh(user)
+
+        return {"message": "User registered", "user_id": user.id}
+
+
+@app.get("/me")
+def get_me(user: User = Depends(get_current_user)):
+    return {"user_id": user.id, "email": user.email}
 
 @app.get(
     "/tasks",
@@ -250,3 +318,7 @@ def edit_task_submit(
         session.commit()
 
     return RedirectResponse(url="/", status_code=303)
+
+@app.post("/token")
+def token_endpoint(form_data: OAuth2PasswordRequestForm = Depends()):
+    return login_token(form_data)

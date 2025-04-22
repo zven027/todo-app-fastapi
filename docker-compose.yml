@@ -1,0 +1,29 @@
+version: '3.8'  # ← Docker Compose のバージョン
+
+services:
+  db:  # データベースサービス
+    image: postgres:15
+    restart: always
+    environment:  # ← .env から読み取る
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # ← DBのデータを永続化
+
+  web:  # FastAPI アプリ側
+    build: .  # カレントディレクトリの Dockerfile を使ってビルド
+    depends_on:
+      - db  # db（PostgreSQL）が先に起動される
+    ports:
+      - "8000:8000"  # ホストの8000番 → コンテナの8000番
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:${POSTGRES_PORT}/${POSTGRES_DB}
+      SECRET_KEY: ${SECRET_KEY}
+    volumes:
+      - .:/app  # ホスト側の全ファイルを /app にマウント
+
+volumes:
+  postgres_data:  # 名前付きボリューム。DBデータを保存

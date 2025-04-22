@@ -10,3 +10,5 @@ __pycache__/
 
 # VSCode系設定ファイル（任意）
 .vscode/
+
+.env

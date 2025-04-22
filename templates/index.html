@@ -153,8 +153,6 @@
     <div style="color: #2c3e50;">📅 期限：{{ task.due_date.strftime('%Y-%m-%d') }}</div>
   {% endif %}
 {% endif %}
-
-
         {% if task.tags %}
           <div>
             {% for tag in task.tags %}

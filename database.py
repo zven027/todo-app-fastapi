@@ -1,9 +1,20 @@
 from sqlmodel import SQLModel, create_engine
+from dotenv import load_dotenv
+import os
+from dotenv import load_dotenv
+# .env ファイルを読み込む
+load_dotenv()
 
-# 连接到本地 SQLite 数据库文件（如果没有会自动创建）
-sqlite_url="sqlite:///./tasks.db"
-engine = create_engine(sqlite_url,echo=True)
+# DATABASE_URL を環境変数から取得
+DATABASE_URL = os.getenv("DATABASE_URL")
 
-# 自动根据模型创建数据库中的表
+# PostgreSQL 用のエンジンを作成
+engine = create_engine(DATABASE_URL, echo=True)
+
+def init_db():
+    SQLModel.metadata.create_all(engine)
+    
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
+
+print("DATABASE_URL:", DATABASE_URL)
