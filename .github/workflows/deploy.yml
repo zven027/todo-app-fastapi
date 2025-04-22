@@ -3,7 +3,7 @@ name: Deploy to Railway
 on:
   push:
     branches:
-      - main  # mainブランチに push されたら動く
+      - main
 
 jobs:
   deploy:
@@ -23,9 +23,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Railway CLI をインストール
+        run: npm install -g @railway/cli
+
       - name: Railway にデプロイ
-        uses: railwayapp/cli-action@v1
-        with:
-          command: up
+        run: railway up
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
