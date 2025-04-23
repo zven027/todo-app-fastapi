@@ -1,46 +1,67 @@
-# 📝 ToDoアプリ（FastAPI + SQLModel）
+以下は、内容を自然で読みやすく、実務ポートフォリオとして使えるように整えた README のサンプルです（不要な文や重複を削除し、順序も整理しました）：
 
-FastAPI・SQLModel・Jinja2 を用いたシンプルなToDoアプリケーションです。  
-タグの付与、状態の切り替え、期限（due_date）の設定など、基本的なタスク管理機能を備えています。
+⸻
 
-A simple ToDo web application built with FastAPI, SQLModel, and Jinja2.  
-Includes features like tagging, completion toggling, and due date assignment.
+📝 ToDoアプリ（FastAPI + SQLModel）
+
+FastAPI・SQLModel・Jinja2 を用いたシンプルで拡張性のある ToDo アプリケーションです。
+タスクの作成・編集・完了状態の切り替え・タグ付け・期限の設定など、基本的なタスク管理機能を備えています。
+
+A clean and extendable ToDo app built with FastAPI, SQLModel, and Jinja2.
+Supports creating, editing, tagging, and toggling task status with deadline support.
+
+⸻
+
+🌐 公開URL（デプロイ済みアプリ）
+
+🔗 https://todo-app-fastapi-production.up.railway.app
+
+Railway を用いたクラウドデプロイ。
+CI/CD パイプライン（GitHub Actions）により、main ブランチへの push をトリガーに自動デプロイされます。
+
+⸻
+
+🚀 本番環境デプロイ（AWS EC2 × Docker）
+
+このバージョンは、AWS EC2 上で Docker を利用して本番デプロイする構成です。
+
+🔧 セットアップ手順
+
+# Docker イメージのビルド
+docker build -t todo-app .
+
+# コンテナの起動（ポート8000をバインド）
+docker run -d -p 8000:8000 --env-file .env todo-app
+
+EC2 環境用には Dockerfile を使用し、Railway 用には Dockerfile.railway を使用してください。
+.env に正しい DATABASE_URL を記述する必要があります：
+
+DATABASE_URL=postgresql://<ユーザー名>:<パスワード>@<DBエンドポイント>:5432/<DB名>?sslmode=require
 
 
----
 
-## 🔗 公開デモ / Live Demo
+⸻
 
-📍 ## 🔗 公開URL（デプロイ済みアプリ）
-[https://todo-app-fastapi-production.up.railway.app](https://todo-app-fastapi-production.up.railway.app)
-> FastAPI + SQLModel 製の ToDo アプリを Railway にてデプロイしています。  
-> 本アプリは GitHub Actions を用いた CI/CD パイプラインを導入しており、  
-> `main` ブランチへの push をきっかけに、Railway に自動で本番環境へデプロイされます。  
-> コードを変更して commit・push するだけで、すぐに最新の状態が反映される仕組みです 。
----
+🛠️ 技術スタック / Tech Stack
+	•	Python 3.10+
+	•	FastAPI
+	•	SQLModel（SQLAlchemy + Pydantic）
+	•	Jinja2（テンプレートエンジン）
+	•	PostgreSQL / SQLite（DB切替可能）
+	•	GitHub Actions（CI/CD）
+	•	Railway / AWS EC2（クラウドホスティング）
 
-## 📌 使用技術 / Tech Stack
+⸻
 
-- Python 3.10+
-- FastAPI
-- SQLModel（SQLAlchemy + Pydantic ベース）
-- Jinja2
-- SQLite（ローカルDB）
-- GitHub Actions（CI/CD 自動デプロイ）
-- Railway（クラウドホスティング）
+✅ 主な機能 / Features
+	•	タスクの追加・削除・編集
+	•	タグの追加・削除（多対多リレーション）
+	•	完了状態の切り替え
+	•	タグ・状態でのフィルタリング
+	•	期限（due_date）の設定
+	•	UI + REST API 両対応
 
----
-
-## ✅ 主な機能 / Features
-
-- タスクの作成・削除（UI + API 対応）
-- タグ付け（多対多の関係に対応）
-- タスクの完了状態の切り替え
-- タグ・状態による絞り込み表示
-- タスクの編集（タイトル・状態・期限）
-- タスクごとの期限設定（due_date）
-
----
+⸻
 
 ## 📸 スクリーンショット
 
@@ -48,39 +69,31 @@ Includes features like tagging, completion toggling, and due date assignment.
 |------------|--------------|----------|
 | ![main](./screenshot_main.png) | ![filtered](./screenshot_filtered.png) | ![edit](./screenshot_edit.png) |
 
----
+⸻
 
-## 🚀 セットアップ / Setup
+📂 プロジェクト構成（抜粋）
 
-```bash
-# 依存パッケージのインストール
-pip install -r requirements.txt
-
-# 初期DBの作成（初回のみ）
-python init_db.py
-
-# 開発サーバー起動
-uvicorn main:app --reload
-
-📁 ディレクトリ構成
-todo-api/
-├── main.py                  # アプリエントリポイント
-├── models.py                # SQLModel定義
-├── crud.py                  # DB操作ロジック
-├── database.py              # DB接続設定
-├── init_db.py               # テーブル初期化スクリプト
-├── templates/
-│   ├── index.html           # メイン画面
-│   └── edit.html            # タスク編集画面
-├── tasks.db                 # SQLite DB（.gitignore対象）
+todo-app-fastapi/
+├── main.py              # アプリエントリポイント
+├── database.py          # DB接続設定
+├── crud.py              # データベース操作
+├── models.py            # SQLModel定義
+├── init_db.py           # テーブル初期化スクリプト
+├── templates/           # Jinja2テンプレート
+├── Dockerfile           # EC2用Dockerfile
+├── Dockerfile.railway   # Railway用Dockerfile
+├── .env                 # 環境変数設定（DATABASE_URLなど）
 └── README.md
 
 
----
 
-This project is licensed under the MIT License.
-✅ Railway deploy test
-## Test Deploy 2025年 4月22日 火曜日 18時00分43秒 JST
-## Test Deploy Tue Apr 22 18:00:49 JST 2025
+⸻
 
-🚀 Test CI/CD 自動デプロイ成功するかな？
+📄 ライセンス
+
+MIT License
+
+⸻
+
+この形式なら GitHub にアップしても見やすく、就職活動のポートフォリオ資料としてもプロっぽく見えます ✨
+.dockerignore も続けて必要であれば、すぐ出せます！
