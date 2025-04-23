@@ -1,0 +1,15 @@
+# 🐍 軽量な Python ベースイメージ
+FROM python:3.10-slim
+
+# 作業ディレクトリを設定
+WORKDIR /app
+
+# アプリケーションの全ファイルをコピー
+COPY . /app
+
+# パッケージをインストール
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+
+# FastAPI アプリを起動（EC2上ではポート固定の8080）
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
