@@ -1,65 +1,62 @@
-以下は、内容を自然で読みやすく、実務ポートフォリオとして使えるように整えた README のサンプルです（不要な文や重複を削除し、順序も整理しました）：
+完璧です！では、さらに洗練された実務レベルの README に仕上げます。以下は、GitHub 上のポートフォリオとして使えるように整理した完成版です：
 
 ⸻
 
 📝 ToDoアプリ（FastAPI + SQLModel）
 
-FastAPI・SQLModel・Jinja2 を用いたシンプルで拡張性のある ToDo アプリケーションです。
-タスクの作成・編集・完了状態の切り替え・タグ付け・期限の設定など、基本的なタスク管理機能を備えています。
+FastAPI・SQLModel・Jinja2 を活用した拡張性の高いタスク管理アプリです。
+タスクの追加・編集・完了状態の切替・タグ付け・期限設定など、業務でも活用可能な機能を備えています。
 
-A clean and extendable ToDo app built with FastAPI, SQLModel, and Jinja2.
-Supports creating, editing, tagging, and toggling task status with deadline support.
+A clean and extendable ToDo application built with FastAPI, SQLModel, and Jinja2.
 
 ⸻
 
-🌐 公開URL（デプロイ済みアプリ）
+🌐 デプロイ済みアプリ（公開URL）
 
 🔗 https://todo-app-fastapi-production.up.railway.app
-
-Railway を用いたクラウドデプロイ。
-CI/CD パイプライン（GitHub Actions）により、main ブランチへの push をトリガーに自動デプロイされます。
+	•	Railway にてクラウドホスティング
+	•	GitHub Actions による CI/CD 対応
+→ main ブランチへの push で自動デプロイが行われます。
 
 ⸻
 
 🚀 本番環境デプロイ（AWS EC2 × Docker）
 
-このバージョンは、AWS EC2 上で Docker を利用して本番デプロイする構成です。
+Docker を活用し、AWS EC2 上にアプリを構築・公開しています。
 
-🔧 セットアップ手順
+🔧 セットアップ手順（EC2）
 
-# Docker イメージのビルド
+# 1. Docker イメージをビルド
 docker build -t todo-app .
 
-# コンテナの起動（ポート8000をバインド）
+# 2. コンテナを起動（ポート8000をバインド）
 docker run -d -p 8000:8000 --env-file .env todo-app
 
-EC2 環境用には Dockerfile を使用し、Railway 用には Dockerfile.railway を使用してください。
-.env に正しい DATABASE_URL を記述する必要があります：
+🔐 .env ファイルには、以下のような接続情報を記述します：
 
 DATABASE_URL=postgresql://<ユーザー名>:<パスワード>@<DBエンドポイント>:5432/<DB名>?sslmode=require
 
-
+※ EC2 ⇔ RDS 接続のため、セキュリティグループの設定にて ポート 5432 を開放 しておく必要があります。
 
 ⸻
 
-🛠️ 技術スタック / Tech Stack
-	•	Python 3.10+
-	•	FastAPI
-	•	SQLModel（SQLAlchemy + Pydantic）
+🛠️ 技術スタック
+	•	Python 3.10
+	•	FastAPI（軽量な Web フレームワーク）
+	•	SQLModel（SQLAlchemy + Pydantic の統合 ORM）
 	•	Jinja2（テンプレートエンジン）
-	•	PostgreSQL / SQLite（DB切替可能）
-	•	GitHub Actions（CI/CD）
-	•	Railway / AWS EC2（クラウドホスティング）
+	•	SQLite / PostgreSQL（環境に応じて切替）
+	•	GitHub Actions（CI/CD 自動化）
+	•	Railway / AWS EC2（本番環境）
 
 ⸻
 
-✅ 主な機能 / Features
-	•	タスクの追加・削除・編集
-	•	タグの追加・削除（多対多リレーション）
-	•	完了状態の切り替え
-	•	タグ・状態でのフィルタリング
-	•	期限（due_date）の設定
-	•	UI + REST API 両対応
+✅ 主な機能
+	•	タスクの新規作成・削除・編集（UI + API）
+	•	タグ付け機能（多対多リレーション）
+	•	完了状態の ON/OFF 切替
+	•	タグ・状態別のフィルター表示
+	•	タスクの期限（due_date）設定対応
 
 ⸻
 
@@ -71,18 +68,19 @@ DATABASE_URL=postgresql://<ユーザー名>:<パスワード>@<DBエンドポイ
 
 ⸻
 
-📂 プロジェクト構成（抜粋）
+📁 ディレクトリ構成（抜粋）
 
 todo-app-fastapi/
-├── main.py              # アプリエントリポイント
-├── database.py          # DB接続設定
-├── crud.py              # データベース操作
-├── models.py            # SQLModel定義
-├── init_db.py           # テーブル初期化スクリプト
-├── templates/           # Jinja2テンプレート
-├── Dockerfile           # EC2用Dockerfile
-├── Dockerfile.railway   # Railway用Dockerfile
-├── .env                 # 環境変数設定（DATABASE_URLなど）
+├── main.py              # アプリ起動エントリ
+├── database.py          # DB接続処理
+├── crud.py              # DB操作関数群
+├── models.py            # SQLModel の定義
+├── init_db.py           # 初回DB作成用スクリプト
+├── templates/           # Jinja2 HTML テンプレート
+├── Dockerfile           # EC2用のDocker定義
+├── Dockerfile.railway   # Railway 用のDocker定義
+├── docker-compose.yml   # ローカル開発用コンテナ構成
+├── .env                 # 環境変数（DATABASE_URLなど）
 └── README.md
 
 
@@ -95,5 +93,3 @@ MIT License
 
 ⸻
 
-この形式なら GitHub にアップしても見やすく、就職活動のポートフォリオ資料としてもプロっぽく見えます ✨
-.dockerignore も続けて必要であれば、すぐ出せます！
