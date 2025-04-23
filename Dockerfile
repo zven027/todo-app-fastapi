@@ -1,15 +1,15 @@
-# ベースイメージ（軽量なPython環境）
+# ベースイメージ
 FROM python:3.10-slim
 
-# 作業ディレクトリの設定
+# 作業ディレクトリ
 WORKDIR /app
 
-# プロジェクトファイルをコピー
+# ファイルをコピー
 COPY . /app
 
-# パッケージのインストール
+# 依存関係をインストール
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-# 本番用のFastAPIアプリ起動コマンド（ポート8000固定）
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "${PORT}"]
+# ポートは Railway の環境変数 PORT を使う
+CMD uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}
