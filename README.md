@@ -1,30 +1,34 @@
-完璧です！では、さらに洗練された実務レベルの README に仕上げます。以下は、GitHub 上のポートフォリオとして使えるように整理した完成版です：
-
-⸻
-
 📝 ToDoアプリ（FastAPI + SQLModel）
 
-FastAPI・SQLModel・Jinja2 を活用した拡張性の高いタスク管理アプリです。
-タスクの追加・編集・完了状態の切替・タグ付け・期限設定など、業務でも活用可能な機能を備えています。
+FastAPI・SQLModel・Jinja2 を活用した、シンプルかつ拡張性の高いタスク管理アプリです。  
+タスクの追加・編集・完了状態の切り替え、タグ付け、期限設定など、業務や個人利用に幅広く対応可能です。
 
-A clean and extendable ToDo application built with FastAPI, SQLModel, and Jinja2.
+> A clean, maintainable, and extensible ToDo application built with FastAPI, SQLModel, and Jinja2.
 
-⸻
+---
 
-🌐 デプロイ済みアプリ（公開URL）
+🌐 公開中のアプリケーション
 
-🔗 https://todo-app-fastapi-production.up.railway.app
-	•	Railway にてクラウドホスティング
-	•	GitHub Actions による CI/CD 対応
-→ main ブランチへの push で自動デプロイが行われます。
+🚀 Railway 版（開発・検証用途）
+🔗 https://todo-app-fastapi-production.up.railway.app  
+- Railway によるクラウドホスティング  
+- GitHub Actions による CI/CD 自動デプロイ対応
 
-⸻
+🛡 本番環境版（独自ドメイン × SSL 対応）
+🔗 https://zewei.online  
+- AWS EC2 × Docker による運用  
+- Let’s Encrypt による常時SSL（HTTPS）化  
+- `main` ブランチへの push で自動デプロイ（CI/CD）
 
-🚀 本番環境デプロイ（AWS EC2 × Docker）
+---
 
-Docker を活用し、AWS EC2 上にアプリを構築・公開しています。
+⚙️ 本番環境構成（AWS EC2 × Docker）
+
+Docker を用いてアプリケーションをコンテナ化し、EC2 上で稼働させています。
 
 🔧 セットアップ手順（EC2）
+
+```bash
 
 # 1. Docker イメージをビルド
 docker build -t todo-app .
@@ -32,7 +36,7 @@ docker build -t todo-app .
 # 2. コンテナを起動（ポート8000をバインド）
 docker run -d -p 8000:8000 --env-file .env todo-app
 
-🔐 .env ファイルには、以下のような接続情報を記述します：
+```
 
 DATABASE_URL=postgresql://<ユーザー名>:<パスワード>@<DBエンドポイント>:5432/<DB名>?sslmode=require
 
@@ -40,23 +44,27 @@ DATABASE_URL=postgresql://<ユーザー名>:<パスワード>@<DBエンドポイ
 
 ⸻
 
-🛠️ 技術スタック
+🛠️ 使用技術スタック
 	•	Python 3.10
-	•	FastAPI（軽量な Web フレームワーク）
-	•	SQLModel（SQLAlchemy + Pydantic の統合 ORM）
-	•	Jinja2（テンプレートエンジン）
-	•	SQLite / PostgreSQL（環境に応じて切替）
-	•	GitHub Actions（CI/CD 自動化）
-	•	Railway / AWS EC2（本番環境）
+	•	FastAPI：モダンな非同期Webフレームワーク
+	•	SQLModel：Pydantic + SQLAlchemy の融合ORM
+	•	Jinja2：軽量テンプレートエンジン
+	•	SQLite / PostgreSQL：開発・本番で切替可能
+	•	Docker / docker-compose：環境構築の自動化
+	•	GitHub Actions：CI/CD自動デプロイ
+	•	Railway / AWS EC2：クラウドデプロイ環境
+	•	Let’s Encrypt：無料SSL証明書（HTTPS対応）
+
 
 ⸻
 
 ✅ 主な機能
-	•	タスクの新規作成・削除・編集（UI + API）
-	•	タグ付け機能（多対多リレーション）
-	•	完了状態の ON/OFF 切替
-	•	タグ・状態別のフィルター表示
-	•	タスクの期限（due_date）設定対応
+	•	タスクの作成・編集・削除（UI / API 両対応）
+	•	タグ機能（多対多リレーション）
+	•	完了状態の切り替え（ON/OFF）
+	•	タグ／状態による絞り込み表示
+	•	期限（due_date）の設定
+	•	Swagger UI による API 自動ドキュメント
 
 ⸻
 
@@ -71,17 +79,17 @@ DATABASE_URL=postgresql://<ユーザー名>:<パスワード>@<DBエンドポイ
 📁 ディレクトリ構成（抜粋）
 
 todo-app-fastapi/
-├── main.py              # アプリ起動エントリ
-├── database.py          # DB接続処理
+├── main.py              # アプリ起動エントリポイント
+├── database.py          # DB接続定義
 ├── crud.py              # DB操作関数群
-├── models.py            # SQLModel の定義
-├── init_db.py           # 初回DB作成用スクリプト
-├── templates/           # Jinja2 HTML テンプレート
-├── Dockerfile           # EC2用のDocker定義
-├── Dockerfile.railway   # Railway 用のDocker定義
-├── docker-compose.yml   # ローカル開発用コンテナ構成
-├── .env                 # 環境変数（DATABASE_URLなど）
-└── README.md
+├── models.py            # SQLModelスキーマ定義
+├── init_db.py           # 初期DB生成スクリプト
+├── templates/           # Jinja2テンプレート（UI）
+├── Dockerfile           # EC2 用 Docker ビルド設定
+├── Dockerfile.railway   # Railway 用ビルド設定
+├── docker-compose.yml   # ローカル開発用構成
+├── .env                 # 環境変数設定ファイル
+└── README.md            # このファイル
 
 
 
@@ -93,8 +101,3 @@ MIT License
 
 ⸻
 
-🚀 CI/CD Deploy Test Wed Apr 23 22:14:09 JST 2025
-<!-- ✅ Test CI/CD to EC2 -->
-<!-- ✅ Test CI/CD for EC2 -->
-<!-- ✅ Test CI/CD for EC2 -->
-# デプロイテスト
